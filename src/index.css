@@ -1,10 +1,15 @@
+/* Reset Global agar ukuran elemen konsisten */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 :root {
-  --vintage-white: #FDFBF7; /* Clean White / Cream */
-  --soft-brown: #D2B48C;    /* Tan / Soft Brown */
-  --dark-brown: #5D4037;    /* Text Color / Borders */
-  --accent-gold: #C5A059;   /* Highlights */
-  --font-heading: 'Playfair Display', serif; /* Font Vintage */
-  --font-body: 'Courier New', monospace;     /* Font Typewriter */
+  --vintage-white: #FDFBF7;
+  --soft-brown: #D2B48C;
+  --dark-brown: #5D4037;
+  --accent-gold: #C5A059;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Courier New', monospace;
 }
 
 body {
@@ -15,7 +20,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Gunakan dvh (dynamic viewport height) untuk mobile browser modern */
   min-height: 100vh;
+  min-height: 100dvh; 
+  padding: 20px; /* Jarak aman di pinggir layar HP */
 }
 
 /* Style Kartu Vintage */
@@ -23,10 +31,16 @@ body {
   border: 2px solid var(--dark-brown);
   padding: 40px;
   background-image: radial-gradient(var(--vintage-white) 20%, transparent 20%);
-  background-size: 10px 10px; /* Texture dot kecil */
-  box-shadow: 10px 10px 0px var(--soft-brown); /* Efek bayangan kasar */
-  max-width: 500px;
+  background-size: 10px 10px;
+  box-shadow: 10px 10px 0px var(--soft-brown);
+  
+  /* RESPONSIVE: Lebar maksimal 500px, tapi di HP akan ambil 100% lebar */
   width: 100%;
+  max-width: 500px;
+  
+  /* Supaya tidak terlalu nempel saat keyboard muncul */
+  margin: auto; 
+  position: relative;
 }
 
 h1 {
@@ -34,17 +48,37 @@ h1 {
   text-align: center;
   border-bottom: 2px double var(--dark-brown);
   padding-bottom: 10px;
+  margin-top: 0;
+  font-size: 2rem; /* Ukuran font judul */
 }
 
+/* Style untuk Input dan Select */
 input, select, button {
   display: block;
   width: 100%;
   margin: 15px 0;
-  padding: 10px;
+  padding: 12px; /* Padding lebih besar untuk jari */
   border: 1px solid var(--dark-brown);
   background: transparent;
   font-family: var(--font-body);
   color: var(--dark-brown);
+  border-radius: 0; /* Hilangkan rounded corner default iOS */
+  
+  /* PENTING UNTUK IOS: Mencegah zoom in otomatis */
+  font-size: 16px; 
+  
+  /* Hilangkan style bawaan browser (seperti tombol 3D) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Custom Arrow untuk Select agar tetap terlihat Vintage (karena appearance: none menghapus panah) */
+select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235D4037%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right .7em top 50%;
+  background-size: .65em auto;
 }
 
 button {
@@ -55,9 +89,34 @@ button {
   text-transform: uppercase;
   letter-spacing: 2px;
   transition: 0.3s;
+  min-height: 48px; /* Tinggi minimal tombol agar mudah ditekan jari */
+  border: none;
 }
 
-button:hover {
+button:hover, button:active {
   background-color: var(--soft-brown);
   color: var(--dark-brown);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 5px var(--accent-gold);
+}
+
+/* --- MEDIA QUERIES (Khusus Layar Kecil) --- */
+@media (max-width: 600px) {
+  .booking-card {
+    padding: 20px; /* Kurangi padding kartu di HP */
+    box-shadow: 5px 5px 0px var(--soft-brown); /* Bayangan lebih kecil */
+  }
+
+  h1 {
+    font-size: 1.5rem; /* Judul lebih kecil */
+  }
+
+  /* Susunan Hari & Tanggal jadi atas-bawah di layar sangat kecil */
+  .date-group {
+    flex-direction: column;
+  }
 }
